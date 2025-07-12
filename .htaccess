@@ -1,0 +1,27 @@
+# This file should be placed in your domain's root directory
+# It redirects all requests to the public folder where Laravel's index.php is located
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # If the request is not for the public directory
+    RewriteCond %{REQUEST_URI} !^/public/
+    
+    # And the file/directory doesn't exist in the root
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    
+    # Redirect to public directory
+    RewriteRule ^(.*)$ /public/$1 [L]
+    
+    # If accessing the root, redirect to public
+    RewriteRule ^$ /public/ [L]
+</IfModule>
+
+# Block access to sensitive directories and files from root
+<FilesMatch "\.(env|log|json|md|lock)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+RedirectMatch 403 ^/?(app|bootstrap|config|database|resources|routes|storage|tests|vendor)/.*$
